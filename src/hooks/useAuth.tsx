@@ -1,7 +1,13 @@
 import { useRouter } from "next/router";
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
-import { setCookie } from "nookies";
+import { parseCookies, setCookie } from "nookies";
 
 import { api } from "../services";
 
@@ -34,6 +40,26 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User>();
   const isAuthenticated = !!user;
 
+  useEffect(() => {
+    const getUserData = async () => {
+      const { "@Authentication:token": token } = parseCookies();
+
+      if (token) {
+        const response = await api.get("/me");
+
+        const { email, permissions, roles } = response.data;
+
+        setUser({
+          email,
+          permissions,
+          roles,
+        });
+      }
+    };
+
+    getUserData();
+  }, []);
+
   const signIn = async ({ email, password }: SignInCredentials) => {
     try {
       const response = await api.post("sessions", {
@@ -57,6 +83,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         permissions,
         roles,
       });
+
+      api.defaults.headers.Authorization = `Bearer ${token}`;
 
       router.push("/dashboard");
     } catch (err) {
