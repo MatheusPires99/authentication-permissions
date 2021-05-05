@@ -5,6 +5,7 @@ import { parseCookies } from 'nookies';
 
 import { useAuth } from '../hooks';
 import styles from '../styles/Home.module.css';
+import { withSSRGuest } from '../utils/withSSRGuest';
 
 export default function Home() {
   const { signIn } = useAuth();
@@ -40,19 +41,8 @@ export default function Home() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async ctx => {
-  const cookies = parseCookies(ctx);
-
-  if (cookies['@Authentication:token']) {
-    return {
-      redirect: {
-        destination: '/dashboard',
-        permanent: false,
-      },
-    };
-  }
-
+export const getServerSideProps: GetServerSideProps = withSSRGuest(async () => {
   return {
     props: {},
   };
-};
+});
