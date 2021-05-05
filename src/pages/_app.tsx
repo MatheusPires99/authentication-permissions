@@ -1,6 +1,6 @@
-import { AppProps } from "next/app";
+import { AppProps } from 'next/app';
 
-import { AuthProvider } from "../hooks";
+import { AuthProvider } from '../hooks';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

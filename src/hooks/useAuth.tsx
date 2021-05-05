@@ -1,15 +1,15 @@
-import { useRouter } from "next/router";
+import { useRouter } from 'next/router';
 import {
   createContext,
   ReactNode,
   useContext,
   useEffect,
   useState,
-} from "react";
+} from 'react';
 
-import { parseCookies, setCookie } from "nookies";
+import { parseCookies, setCookie } from 'nookies';
 
-import { api } from "../services";
+import { api } from '../services';
 
 type User = {
   email: string;
@@ -42,10 +42,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   useEffect(() => {
     const getUserData = async () => {
-      const { "@Authentication:token": token } = parseCookies();
+      const { '@Authentication:token': token } = parseCookies();
 
       if (token) {
-        const response = await api.get("/me");
+        const response = await api.get('/me');
 
         const { email, permissions, roles } = response.data;
 
@@ -62,20 +62,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const signIn = async ({ email, password }: SignInCredentials) => {
     try {
-      const response = await api.post("sessions", {
+      const response = await api.post('sessions', {
         email,
         password,
       });
 
       const { token, refreshToken, permissions, roles } = response.data;
 
-      setCookie(undefined, "@Authentication:token", token, {
+      setCookie(undefined, '@Authentication:token', token, {
         maxAge: 60 * 60 * 24 * 30, // 30 days
-        path: "/",
+        path: '/',
       });
-      setCookie(undefined, "@Authentication:refreshToken", refreshToken, {
+      setCookie(undefined, '@Authentication:refreshToken', refreshToken, {
         maxAge: 60 * 60 * 24 * 30, // 30 days
-        path: "/",
+        path: '/',
       });
 
       setUser({
@@ -86,7 +86,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
       api.defaults.headers.Authorization = `Bearer ${token}`;
 
-      router.push("/dashboard");
+      router.push('/dashboard');
     } catch (err) {
       console.log(err);
     }
@@ -103,7 +103,7 @@ export const useAuth = (): AuthContextData => {
   const context = useContext(AuthContext);
 
   if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider');
   }
 
   return context;
