@@ -7,9 +7,10 @@ import {
   useState,
 } from 'react';
 
-import { parseCookies, setCookie, destroyCookie } from 'nookies';
+import { parseCookies, setCookie } from 'nookies';
 
 import { api } from '../services';
+import { removeAuthTokens } from '../utils';
 
 type User = {
   email: string;
@@ -35,8 +36,7 @@ type AuthProviderProps = {
 const AuthContext = createContext({} as AuthContextData);
 
 export const signOut = () => {
-  destroyCookie(undefined, '@Authentication:token');
-  destroyCookie(undefined, '@Authentication:refreshToken');
+  removeAuthTokens();
 
   Router.push('/');
 };

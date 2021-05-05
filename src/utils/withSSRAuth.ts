@@ -4,9 +4,10 @@ import {
   GetServerSidePropsResult,
 } from 'next';
 
-import { destroyCookie, parseCookies } from 'nookies';
+import { parseCookies } from 'nookies';
 
 import { AuthTokenError } from '../services/errors';
+import { removeAuthTokens } from './removeAuthTokens';
 
 export function withSSRAuth<T>(fn: GetServerSideProps<T>) {
   return async (
@@ -28,8 +29,7 @@ export function withSSRAuth<T>(fn: GetServerSideProps<T>) {
       return await fn(ctx);
     } catch (err) {
       if (err instanceof AuthTokenError) {
-        destroyCookie(ctx, '@Authentication:token');
-        destroyCookie(ctx, '@Authentication:refreshToken');
+        removeAuthTokens(ctx);
 
         return {
           redirect: {
