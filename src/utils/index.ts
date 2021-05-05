@@ -1,1 +1,2 @@
-import { withSSRGuest } from './withSSRGuest';
+export { withSSRGuest } from './withSSRGuest';
+export { withSSRAuth } from './withSSRAuth';

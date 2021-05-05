@@ -1,11 +1,9 @@
 import { GetServerSideProps } from 'next';
 import { FormEvent, useState } from 'react';
 
-import { parseCookies } from 'nookies';
-
 import { useAuth } from '../hooks';
+import { withSSRGuest } from '../utils';
 import styles from '../styles/Home.module.css';
-import { withSSRGuest } from '../utils/withSSRGuest';
 
 export default function Home() {
   const { signIn } = useAuth();

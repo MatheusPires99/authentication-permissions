@@ -1,1 +1,2 @@
-export { api } from './api';
+export { setupApiClient } from './api';
+export { api } from './apiClient';
