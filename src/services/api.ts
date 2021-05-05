@@ -2,6 +2,7 @@ import axios, { AxiosError } from 'axios';
 import { parseCookies, setCookie } from 'nookies';
 
 import { signOut } from '../hooks/useAuth';
+import { AuthTokenError } from './errors';
 
 let isRefreshing = false;
 let failedRequestsQueue = [];
@@ -89,6 +90,8 @@ export const setupApiClient = (ctx = undefined) => {
           }
         } else if (process.browser) {
           signOut();
+        } else {
+          return Promise.reject(new AuthTokenError());
         }
       }
 
