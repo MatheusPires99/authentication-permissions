@@ -11,12 +11,7 @@ import { parseCookies, setCookie } from 'nookies';
 
 import { api } from '../services';
 import { removeAuthTokens } from '../utils';
-
-type User = {
-  email: string;
-  permissions: string[];
-  roles: string[];
-};
+import { User } from '../types';
 
 type SignInCredentials = {
   email: string;
